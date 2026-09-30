@@ -1,0 +1,17 @@
+<main>
+  <h1>TaskFlow</h1>
+  <h2>API Health</h2>
+
+  @if (health(); as h) {
+    <p>
+      Status:
+      <strong [style.color]="h.success ? 'green' : 'red'">
+        {{ h.success ? 'OK' : 'DOWN' }}
+      </strong>
+    </p>
+    <pre>{{ h.data | json }}</pre>
+    <p>{{ h.message }}</p>
+  } @else {
+    <p>Loading...</p>
+  }
+</main>
