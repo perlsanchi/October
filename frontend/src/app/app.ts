@@ -2,11 +2,12 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HealthService } from './core/services/health';
 import { HealthResponse } from './core/models/health-response';
+import { Greeting } from './features/greeting/greeting';  
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Greeting], 
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
