@@ -31,3 +31,12 @@ def health_check(request):
         errors=checks,
         status_code=503,
     )
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def greeting(request):
+    name = request.query_params.get("name", "sahil")  #default is natasha
+    return success_response(
+        data={"name": name},
+        message=f"Hello {name}",
+    )
