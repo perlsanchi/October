@@ -1,20 +1,33 @@
-<h1>TaskFlow</h1>
+<header class="app-nav">
+  <strong>TaskFlow</strong>
+  <nav>
+    @if (auth.currentUser(); as user) {
+      <span class="who">Hi, {{ user.full_name || user.email }}</span>
+      <button (click)="onLogout()">Logout</button>
+    } @else {
+      <a routerLink="/login">Log In</a>
+    }
+  </nav>
+</header>
 
-<app-greeting></app-greeting>
+<main class="app-content">
+  <router-outlet></router-outlet>
 
-<hr />
+  <app-greeting></app-greeting>
 
-<h2>API Health</h2>
+  <hr />
 
-@if (health(); as h) {
-  <p>
-    Status:
-    <strong [style.color]="h.success ? 'blue' : 'red'">
-      {{ h.success ? 'OK' : 'DOWN' }}
-    </strong>
-  </p>
-  <pre>{{ h.data | json }}</pre>
-  <p>{{ h.message }}</p>
-} @else {
-  <p>Loading...</p>
-}
+  <h2>API Health</h2>
+  @if (health(); as h) {
+    <p>
+      Status:
+      <strong [style.color]="h.success ? 'green' : 'red'">
+        {{ h.success ? 'OK' : 'DOWN' }}
+      </strong>
+    </p>
+    <pre>{{ h.data | json }}</pre>
+    <p>{{ h.message }}</p>
+  } @else {
+    <p>Loading...</p>
+  }
+</main>
