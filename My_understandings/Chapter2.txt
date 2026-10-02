@@ -1,3 +1,6 @@
+superuser
+sanchimeshram211@gmail.com
+Gaurav@2026
 Lesson 2 — HTTP Fundamentals Deep Dive
 
 ┌─────────────────────────────────────────┐
@@ -96,3 +99,10 @@ X-Frame-Options: DENY
 X-Content-Type-Options: nosniff
 Referrer-Policy: same-origin
 Cross-Origin-Opener-Policy: same-origin
+
+
+
+
+Doubt:-
+if docker handles who installs packages from requirements.txt?
+Starting development server at http://0.0.0.0:8000/.  but we have whitelisted cors in another port?
