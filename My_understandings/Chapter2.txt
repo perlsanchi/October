@@ -1,0 +1,98 @@
+Lesson 2 — HTTP Fundamentals Deep Dive
+
+┌─────────────────────────────────────────┐
+│  REQUEST                                │
+│  ───────                                │
+│  METHOD  /path?query   HTTP/1.1         │
+│  Header-Name: value                     │
+│  Header-Name: value                     │
+│                                         │
+│  body bytes (optional)                  │
+├─────────────────────────────────────────┤
+│  RESPONSE                               │
+│  ────────                               │
+│  HTTP/1.1  200 OK                       │
+│  Header-Name: value                     │
+│  Header-Name: value                     │
+│                                         │
+│  body bytes (optional)                  │
+└─────────────────────────────────────────┘
+
+
+Four things to master:
+
+Method — what you want to do (GET/POST/PUT/PATCH/DELETE/HEAD/OPTIONS)
+
+URL — which resource (/api/tasks/42/)
+
+Headers — metadata (auth, content type, accept, cache)
+
+Body — the payload (JSON, form data, files)
+
+
+For a prettier curl we use in powershell
+notepad $PROFILE
+New-Item -Path (Split-Path $PROFILE) -ItemType Directory -Force
+New-Item -Path $PROFILE -ItemType File -Force
+notepad $PROFILE
+
+paste it
+function hit {
+    param([string]$Url, [string]$Method = "GET", [hashtable]$Headers = @{}, [string]$Body = $null)
+    Write-Host "`n=== $Method $Url ===" -ForegroundColor Cyan
+    $args = @("-s", "-i", "-X", $Method)
+    foreach ($k in $Headers.Keys) { $args += @("-H", "$k`: $($Headers[$k])") }
+    if ($Body) { $args += @("-d", $Body) }
+    $args += $Url
+    & curl.exe @args
+    Write-Host ""
+}
+
+. $PROFILE
+
+test it - hit http://localhost:8000/api/health/
+
+hit http://localhost:8000/api/health/
+
+PS C:\Users\Natasha> hit http://localhost:8000/api/health/
+
+=== GET http://localhost:8000/api/health/ ===
+HTTP/1.1 200 OK
+Date: Wed, 30 Sep 2026 14:16:55 GMT
+Server: WSGIServer/0.2 CPython/3.12.14
+Content-Type: application/json
+Vary: Accept, Cookie, origin
+Allow: GET, OPTIONS
+X-Frame-Options: DENY
+Content-Length: 90
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+
+{"success":true,"data":{"database":true,"cache":true},"message":"All systems operational"}
+
+HTTP/1.1 200 OK	Status line: protocol + code + reason phrase
+Date	Server time (RFC 1123 format)
+Server	Framework banner — we'll hide this in production
+Content-Type: application/json	Body is JSON
+Allow: GET, HEAD, OPTIONS	Which methods this URL accepts
+X-Frame-Options: DENY	Clickjacking protection (Django middleware)
+Content-Length: 84	Body size in bytes
+Vary: Accept, Cookie	Cache should key on these headers
+
+
+
+For only header and no body
+PS C:\Users\Natasha> hit http://localhost:8000/api/health/ -Method HEAD
+
+=== HEAD http://localhost:8000/api/health/ ===
+HTTP/1.1 405 Method Not Allowed
+Date: Wed, 30 Sep 2026 14:19:43 GMT
+Server: WSGIServer/0.2 CPython/3.12.14
+Content-Type: application/json
+Vary: Accept, Cookie, origin
+Allow: GET, OPTIONS
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
